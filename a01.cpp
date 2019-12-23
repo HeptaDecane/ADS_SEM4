@@ -28,6 +28,12 @@ public:
 	void inorderIterative();
 	void preorderIterative();
 	void postorderIterative();
+	void passMirror();
+	void mirror(Node *);
+	bool isEqual(Tree);
+	bool compare(Node*,Node*);
+	void passErase();
+	void eraseRecursive(Node*);
 };
 Tree::Tree(){
 	root=NULL;
@@ -173,33 +179,73 @@ void Tree::postorderIterative(){
 		cout<<p->data<<" ";
 	}
 }
+void Tree::passMirror(){
+	if(root==NULL)
+		return;
+	mirror(root);
+}
+void Tree::mirror(Node *p){
+	if(p==NULL)
+		return;
+	Node *temp;
+	mirror(p->left);
+	mirror(p->right);
+	temp=p->left;
+	p->left=p->right;
+	p->right=temp;
+	return;
+}
+bool Tree::isEqual(Tree T){
+	if (compare(this->root,T.root))
+		return true;
+	else
+		return false;
+
+}
+bool Tree::compare(Node*p,Node*q){
+	if(p==NULL&&q==NULL)
+		return true;
+	else if(p==NULL&&q!=NULL)
+		return false;
+	else if(p!=NULL&&q==NULL)
+		return false;
+	else{
+		if(p->data==q->data&&compare(p->left,q->left)&&compare(p->right,q->right))
+			return true;
+		else
+			return false;
+	}
+}
+void Tree::passErase(){
+	if(root==NULL)
+		return;
+	else
+		eraseRecursive(root);
+		root=NULL;
+}
+void Tree::eraseRecursive(Node *p){
+	if(p==NULL)
+		return;;
+	eraseRecursive(p->left);
+	eraseRecursive(p->right);
+	p->left=NULL;
+	p->right=NULL;
+	delete p->right;
+	delete p->left;
+	return;
+}
 int main(){
-	Tree container;
-	container.insert(1);
-	container.insert(2);
-	container.insert(3);
-	container.insert(4);
-	container.insert(5);
-	container.insert(6);
-	container.insert(7);
-	//container.insert(26);
-	container.passInorderRecursive();
-	container.inorderIterative();
-	container.passPreorderRecursive();
-	container.preorderIterative();
-	container.passPostorderRecursive();
-	container.postorderIterative();
+	Tree c1,c2;
+	c1.insert(1);
+	c1.insert(2);
+	c1.insert(3);
+	c1.insert(4);
+	c1.insert(5);
+	c1.insert(6);
+	c1.insert(7);
+	c1.passInorderRecursive();
+	c1.passErase();
+	c1.passInorderRecursive();
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
