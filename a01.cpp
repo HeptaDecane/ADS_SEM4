@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#define MAX 256
 using namespace std;
 class Node{
 	int data;
@@ -7,36 +8,81 @@ class Node{
 public:
 	Node(int);
 	friend class Tree;
+	friend class Stack;
 };
 Node::Node(int data){
 	this->data=data;
 	left=NULL;
 	right=NULL;
 }
+class Stack{
+	Node* array[MAX];
+	int index;
+public:
+	Stack();
+	void push(Node*);
+	void pop();
+	int empty();
+	Node* top();
+};
+Stack::Stack(){
+	index=-1;
+}
+void Stack::push(Node* p){
+	index++;
+	if(index<MAX)
+		array[index]=p;
+	else{
+		cout<<"\nStack Full!";
+		index--;
+	}
+}
+void Stack::pop(){
+	if(index==-1){
+		cout<<"\nStack is Empty";
+		return;
+	}
+	index--;
+}
+int Stack::empty(){
+	return index==-1;
+}
+Node* Stack::top(){
+	if(!empty())
+		return array[index];
+}
 class Tree{
 	Node *root;
 public:
 	Tree();
+	Tree(const Tree&);
 	void insert(int);
 	void searchTreeInsert(int);
-	void passInorderRecursive();
+	void callInorderRecursive();
 	void traverseInorderRecursive(Node *);
-	void passPreorderRecursive();
+	void callPreorderRecursive();
 	void traversePreorderRecursive(Node *);
-	void passPostorderRecursive();
+	void callPostorderRecursive();
 	void traversePostorderRecursive(Node *);
 	void inorderIterative();
 	void preorderIterative();
 	void postorderIterative();
-	void passMirror();
+	void callMirror();
 	void mirror(Node *);
 	bool isEqual(Tree);
 	bool compare(Node*,Node*);
-	void passErase();
+	void callErase();
 	void eraseRecursive(Node*);
+	void callPrintInternalNodes();
+	void printInternalNodes(Node*);
+	void callPrintLeafNodes();
+	void printLeafNodes(Node*);	
 };
 Tree::Tree(){
 	root=NULL;
+}
+Tree::Tree(const Tree &T){
+	this->root=T.root;
 }
 void Tree::insert(int data){
 	Node *temp=new Node(data);
@@ -69,7 +115,7 @@ void Tree::insert(int data){
 				p=p->right;
 	}
 }
-void Tree::passInorderRecursive(){
+void Tree::callInorderRecursive(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
 		return;
@@ -92,7 +138,7 @@ void Tree::inorderIterative(){
 	}
 	cout<<"\n";
 	Node *p=root;
-	stack<Node *> stack;
+	Stack stack;
 	while(p!=NULL||!stack.empty()){
 		while(p!=NULL){
 			stack.push(p);
@@ -105,7 +151,7 @@ void Tree::inorderIterative(){
 	}
 
 }
-void Tree::passPreorderRecursive(){
+void Tree::callPreorderRecursive(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
 		return;
@@ -128,7 +174,7 @@ void Tree::preorderIterative(){
 	}
 	cout<<"\n";
 	Node *p=root;
-	stack<Node *> stack;
+	Stack stack;
 	while(p!=NULL||!stack.empty()){
 		while(p!=NULL){
 			cout<<p->data<<" ";
@@ -140,7 +186,7 @@ void Tree::preorderIterative(){
 		p=p->right;
 	}
 }
-void Tree::passPostorderRecursive(){
+void Tree::callPostorderRecursive(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
 		return;
@@ -161,7 +207,7 @@ void Tree::postorderIterative(){
 		return;		
 	}
 	cout<<"\n";
-	stack<Node *> stack1,stack2;
+	Stack stack1,stack2;
 	Node *p=root;
 	stack1.push(p);
 	while(!stack1.empty()){
@@ -179,7 +225,7 @@ void Tree::postorderIterative(){
 		cout<<p->data<<" ";
 	}
 }
-void Tree::passMirror(){
+void Tree::callMirror(){
 	if(root==NULL)
 		return;
 	mirror(root);
@@ -216,7 +262,7 @@ bool Tree::compare(Node*p,Node*q){
 			return false;
 	}
 }
-void Tree::passErase(){
+void Tree::callErase(){
 	if(root==NULL)
 		return;
 	else
@@ -234,6 +280,32 @@ void Tree::eraseRecursive(Node *p){
 	delete p->left;
 	return;
 }
+void Tree::callPrintLeafNodes(){
+	cout<<"\nLeaf Nodes: ";
+	printLeafNodes(this->root);
+}
+void Tree::printLeafNodes(Node *p){
+	if(p==NULL)
+		return;
+	if(p->left==NULL&&p->right==NULL){
+		cout<<p->data<<" ";
+		return;
+	}
+	printLeafNodes(p->left);
+	printLeafNodes(p->right);
+}
+void Tree::callPrintInternalNodes(){
+	cout<<"\nInternal Nodes: ";
+	printInternalNodes(this->root);
+}
+void Tree::printInternalNodes(Node *p){
+	if(p==NULL)
+		return;
+	if(p->left!=NULL||p->right!=NULL)
+		cout<<p->data<<" ";
+	printInternalNodes(p->left);
+	printInternalNodes(p->right);
+}
 int main(){
 	Tree c1,c2;
 	c1.insert(1);
@@ -243,9 +315,8 @@ int main(){
 	c1.insert(5);
 	c1.insert(6);
 	c1.insert(7);
-	c1.passInorderRecursive();
-	c1.passErase();
-	c1.passInorderRecursive();
+	c1.callPrintLeafNodes();
+	c1.callPrintInternalNodes();
 	return 0;
 }
 
