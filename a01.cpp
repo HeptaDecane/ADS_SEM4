@@ -55,7 +55,6 @@ class Tree{
 	Node *root;
 public:
 	Tree();
-	Tree(const Tree&);
 	void insert(int);
 	void searchTreeInsert(int);
 	void callInorderRecursive();
@@ -77,13 +76,13 @@ public:
 	void printInternalNodes(Node*);
 	void callPrintLeafNodes();
 	void printLeafNodes(Node*);	
+	void operator =(Tree&);
+	Node* setEqual(Node*,Node*);
 };
 Tree::Tree(){
 	root=NULL;
 }
-Tree::Tree(const Tree &T){
-	this->root=T.root;
-}
+
 void Tree::insert(int data){
 	Node *temp=new Node(data);
 	if(root==NULL){
@@ -306,6 +305,21 @@ void Tree::printInternalNodes(Node *p){
 	printInternalNodes(p->left);
 	printInternalNodes(p->right);
 }
+void Tree::operator =(Tree &t){
+	this->root=setEqual(t.root,this->root);
+	//t.callInorderRecursive();
+}
+Node* Tree::setEqual(Node *original,Node *copy){
+	if(original==NULL)
+		copy=NULL;
+	else{
+		copy=new Node(0);
+		copy->data=original->data;
+		copy->left=setEqual(original->left,copy->left);
+		copy->right=setEqual(original->right,copy->right);
+	}
+	return copy;
+}
 int main(){
 	Tree c1,c2;
 	c1.insert(1);
@@ -315,8 +329,7 @@ int main(){
 	c1.insert(5);
 	c1.insert(6);
 	c1.insert(7);
-	c1.callPrintLeafNodes();
-	c1.callPrintInternalNodes();
+	c2=c1;
+	c2.callInorderRecursive();
 	return 0;
 }
-
