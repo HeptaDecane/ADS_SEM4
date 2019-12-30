@@ -50,38 +50,45 @@ int Stack::empty(){
 Node* Stack::top(){
 	if(!empty())
 		return array[index];
+	return NULL;
 }
 class Tree{
+private:
 	Node *root;
+	void traverseInorderRecursive(Node *);
+	void traversePreorderRecursive(Node *);
+	void traversePostorderRecursive(Node *);
+	void mirror(Node *);
+	bool compare(Node*,Node*);
+	void eraseRecursive(Node*);
+	void printInternalNodes(Node*);
+	void printLeafNodes(Node*);
+	Node* setEqual(Node*,Node*);
+
 public:
 	Tree();
 	void insert(int);
-	void searchTreeInsert(int);
+	void insertBst(int);
 	void callInorderRecursive();
-	void traverseInorderRecursive(Node *);
 	void callPreorderRecursive();
-	void traversePreorderRecursive(Node *);
 	void callPostorderRecursive();
-	void traversePostorderRecursive(Node *);
 	void inorderIterative();
 	void preorderIterative();
 	void postorderIterative();
 	void callMirror();
-	void mirror(Node *);
 	bool isEqual(Tree);
-	bool compare(Node*,Node*);
 	void callErase();
-	void eraseRecursive(Node*);
 	void callPrintInternalNodes();
-	void printInternalNodes(Node*);
 	void callPrintLeafNodes();
-	void printLeafNodes(Node*);	
 	void operator =(Tree&);
-	Node* setEqual(Node*,Node*);
+	void menu();
 };
+
+
 Tree::Tree(){
 	root=NULL;
 }
+
 
 void Tree::insert(int data){
 	Node *temp=new Node(data);
@@ -108,12 +115,47 @@ void Tree::insert(int data){
 				p->right=temp;
 				cout<<"\n"<<data<<" Inserted into Tree";
 				return;
-				
+
 			}
 			else
 				p=p->right;
 	}
 }
+
+
+void Tree::insertBst(int data){
+	Node *temp=new Node(data);
+	if(root==NULL){
+		root=temp;
+		cout<<"\n"<<data<<" has been Set as Root Node";
+		return;
+	}
+	Node *p=root;
+	while(true){
+		if(p->data>temp->data)
+			if(p->left==NULL){
+				p->left=temp;
+				cout<<"\n"<<data<<" Inserted";
+				return;
+			}
+			else
+				p=p->left;
+		else if(p->data<temp->data)
+			if(p->right==NULL){
+				p->right=temp;
+				cout<<"\n"<<data<<" Inserted";
+				return;
+			}
+			else
+				p=p->right;
+		else{
+			cout<<"\n"<<data<<" already exists in BST";
+			return;
+		}
+	}
+}
+
+
 void Tree::callInorderRecursive(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
@@ -130,10 +172,12 @@ void Tree::traverseInorderRecursive(Node *p){
 	}
 	return;
 }
+
+
 void Tree::inorderIterative(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
-		return;		
+		return;
 	}
 	cout<<"\n";
 	Node *p=root;
@@ -150,6 +194,8 @@ void Tree::inorderIterative(){
 	}
 
 }
+
+
 void Tree::callPreorderRecursive(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
@@ -166,10 +212,12 @@ void Tree::traversePreorderRecursive(Node *p){
 	}
 	return;
 }
+
+
 void Tree::preorderIterative(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
-		return;		
+		return;
 	}
 	cout<<"\n";
 	Node *p=root;
@@ -185,6 +233,8 @@ void Tree::preorderIterative(){
 		p=p->right;
 	}
 }
+
+
 void Tree::callPostorderRecursive(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
@@ -200,10 +250,12 @@ void Tree::traversePostorderRecursive(Node *p){
 		cout<<p->data<<" ";
 	}
 }
+
+
 void Tree::postorderIterative(){
 	if(root==NULL){
 		cout<<"\nTree is Empty!";
-		return;		
+		return;
 	}
 	cout<<"\n";
 	Stack stack1,stack2;
@@ -224,6 +276,8 @@ void Tree::postorderIterative(){
 		cout<<p->data<<" ";
 	}
 }
+
+
 void Tree::callMirror(){
 	if(root==NULL)
 		return;
@@ -240,6 +294,8 @@ void Tree::mirror(Node *p){
 	p->right=temp;
 	return;
 }
+
+
 bool Tree::isEqual(Tree T){
 	if (compare(this->root,T.root))
 		return true;
@@ -261,6 +317,8 @@ bool Tree::compare(Node*p,Node*q){
 			return false;
 	}
 }
+
+
 void Tree::callErase(){
 	if(root==NULL)
 		return;
@@ -279,8 +337,9 @@ void Tree::eraseRecursive(Node *p){
 	delete p->left;
 	return;
 }
+
+
 void Tree::callPrintLeafNodes(){
-	cout<<"\nLeaf Nodes: ";
 	printLeafNodes(this->root);
 }
 void Tree::printLeafNodes(Node *p){
@@ -293,8 +352,9 @@ void Tree::printLeafNodes(Node *p){
 	printLeafNodes(p->left);
 	printLeafNodes(p->right);
 }
+
+
 void Tree::callPrintInternalNodes(){
-	cout<<"\nInternal Nodes: ";
 	printInternalNodes(this->root);
 }
 void Tree::printInternalNodes(Node *p){
@@ -305,9 +365,10 @@ void Tree::printInternalNodes(Node *p){
 	printInternalNodes(p->left);
 	printInternalNodes(p->right);
 }
+
+
 void Tree::operator =(Tree &t){
 	this->root=setEqual(t.root,this->root);
-	//t.callInorderRecursive();
 }
 Node* Tree::setEqual(Node *original,Node *copy){
 	if(original==NULL)
@@ -320,16 +381,109 @@ Node* Tree::setEqual(Node *original,Node *copy){
 	}
 	return copy;
 }
+
+
+void Tree::menu(){
+	cout<<"\n------------------------------------------------------";
+	cout<<"\n           OPTION INDEX";
+	cout<<"\nPress 1  : Enter Data into Tree";
+	cout<<"\nPress 2  : In-order Recursive";
+	cout<<"\nPress 3  : Pre-order Recursive";
+	cout<<"\nPress 4  : Post-order Recursive";
+	cout<<"\nPress 5  : In-order Iterative";
+	cout<<"\nPress 6  : Pre-order Iterative";
+	cout<<"\nPress 7  : Post-order Iterative";
+	cout<<"\nPress 8  : Mirror the Existing Tree";
+	cout<<"\nPress 9  : Compare Tree 1 and Tree 2";
+	cout<<"\nPress 10 : Erase All Nodes Of Selected Tree";
+	cout<<"\nPress 11 : Print Leaf Nodes";
+	cout<<"\nPress 12 : Print Internal Nodes";
+	cout<<"\nPress 13 : Assign Other Tree to Selected Tree";
+	cout<<"\nPress 14 : Select [Tree 1 | Tree 2]";
+	cout<<"\nPress 99 : Display Option Index";
+	cout<<"\n------------------------------------------------------";
+}
+
+
 int main(){
-	Tree c1,c2;
-	c1.insert(1);
-	c1.insert(2);
-	c1.insert(3);
-	c1.insert(4);
-	c1.insert(5);
-	c1.insert(6);
-	c1.insert(7);
-	c2=c1;
-	c2.callInorderRecursive();
+	Tree t1,t2;
+	Tree *t=&t1;
+	int choice=1;
+	int data;
+	int bst=0;
+	int selected=0;
+	cout<<"\nPress 0 : Simple Binary Tree\nPress 1: Binary Search Tree\nEnter Choice: ";
+	cin>>bst;
+	while(choice){
+		switch(choice){
+			case 1:	cout<<"\nEnter Data Element(Tree 1): ";
+					cin>>data;
+					if(bst)
+						t->insertBst(data);
+					else
+						t->insert(data);
+					break;
+			case 2: cout<<"\nInorder Traversal(Recursive) : ";
+					t->callInorderRecursive();
+					break;
+			case 3: cout<<"\nPreorder Traversal(Recursive) : ";
+					t->callPreorderRecursive();
+					break;
+			case 4: cout<<"\nPostorder Traversal(Recursive) : ";
+					t->callPostorderRecursive();
+					break;
+			case 5: cout<<"\nInorder Traversal(Iterative) : ";
+					t->inorderIterative();
+					break;
+			case 6: cout<<"\nPreorder Traversal(Iterative) : ";
+					t->preorderIterative();
+					break;
+			case 7: cout<<"\nPostorder Traversal(Iterative) : ";
+					t->postorderIterative();
+					break;
+			case 8: cout<<"\nMirrored The Existing tree!";
+					break;
+			case 9: if(selected)
+						if(t->isEqual(t1))
+							cout<<"\n Tree 1 and Tree 2 are identical";
+						else
+							cout<<"\n Tree 1 and Tree 2 are NOT identical";
+					else
+						if(t->isEqual(t2))
+							cout<<"\nTree 1 and Tree 2 are identical";
+						else
+							cout<<"\nTree 1 and Tree 2 are NOT identical";
+					break;
+			case 10:cout<<"\nTree Erased!";
+					break;
+			case 11:cout<<"\nLeaf Nodes: ";
+					t->callPrintLeafNodes();
+					break;
+			case 12:cout<<"\nInternal Nodes: ";
+					t->callPrintInternalNodes();
+					break;
+			case 13:if(selected){
+						t2=t1;
+						cout<<"Assigned Tree 1 to Tree 2";
+					}
+					else{
+						t1=t2;
+						cout<<"Assigned Tree 2 to Tree 1";
+					}
+					break;
+			case 14:cout<<"\nPress: 0 for Tree 1\nPress: 1 for Tree 2\nEnter Choice: ";
+					cin>>selected;
+					if(selected)
+						t=&t2;
+					else
+						t=&t1;
+					break;
+			case 99:t->menu();
+					break;
+			default:cout<<"\nEnter Valid Choice";
+		}
+		cout<<"\nEnter Choice [99-Option Index | 0-Exit]: ";
+		cin>>choice;
+	}
 	return 0;
 }
