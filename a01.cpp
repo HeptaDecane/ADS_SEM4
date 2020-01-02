@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 #define MAX 256
 using namespace std;
+
+/**************************************************************************************************/
 class Node{
 	int data;
 	Node *left;
@@ -10,11 +12,14 @@ public:
 	friend class Tree;
 	friend class Stack;
 };
+
 Node::Node(int data){
 	this->data=data;
 	left=NULL;
 	right=NULL;
 }
+/**************************************************************************************************/
+
 class Stack{
 	Node* array[MAX];
 	int index;
@@ -25,9 +30,11 @@ public:
 	int empty();
 	Node* top();
 };
+
 Stack::Stack(){
 	index=-1;
 }
+
 void Stack::push(Node* p){
 	index++;
 	if(index<MAX)
@@ -37,6 +44,7 @@ void Stack::push(Node* p){
 		index--;
 	}
 }
+
 void Stack::pop(){
 	if(index==-1){
 		cout<<"\nStack is Empty";
@@ -44,14 +52,18 @@ void Stack::pop(){
 	}
 	index--;
 }
+
 int Stack::empty(){
 	return index==-1;
 }
+
 Node* Stack::top(){
 	if(!empty())
 		return array[index];
 	return NULL;
 }
+/**************************************************************************************************/
+
 class Tree{
 private:
 	Node *root;
@@ -403,7 +415,7 @@ void Tree::menu(){
 	cout<<"\nPress 99 : Display Option Index";
 	cout<<"\n------------------------------------------------------";
 }
-
+/**************************************************************************************************/
 
 int main(){
 	Tree t1,t2;
