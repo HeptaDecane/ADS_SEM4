@@ -175,12 +175,13 @@ void ThreadedBinaryTree::oneBranch(Node *p,Node *q){
 }
 void ThreadedBinaryTree::twoBranch(Node *p,Node *q){
 	Node *parsucc=q;
-	Node *succ=p->right;
+	Node *succ=q->right;
 	while(succ->leftTag!=false){
 		parsucc=succ;
 		succ=succ->left;
 	}
 	q->data=succ->data;
+	
 	if(succ->leftTag==false&&succ->rightTag==false)
 		noBranch(parsucc,succ);
 	else
@@ -232,7 +233,7 @@ int main(){
 	cout<<"\nInorder: ";
 	container.callInorder();
 	cout<<"\n";
-	container.deleteNode(80);
+	container.deleteNode(50);
 	cout<<"\nInorder: ";
 	container.callInorder();
 	cout<<"\n";
