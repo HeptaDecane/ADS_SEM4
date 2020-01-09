@@ -30,6 +30,12 @@ public:
 	void insert(int);
 	void callInorder();
 	void inorder(Node*);
+	void deleteNode(int);
+	void noBranch(Node*,Node*);
+	void oneBranch(Node*,Node*);
+	void twoBranch(Node*,Node*);
+	Node* inPred(Node*);
+	Node* inSucc(Node*);
 };
 ThreadedBinaryTree::ThreadedBinaryTree(){
 	root=new Node(0);
@@ -115,6 +121,108 @@ void ThreadedBinaryTree::inorder(Node* p){
 	if(p->rightTag)
 		inorder(p->right);
 }
+Node* ThreadedBinaryTree::inPred(Node *p){
+	if(p->leftTag==false)
+		return p->left;
+	p=p->left;
+	while(p->rightTag!=false)
+		p=p->right;
+	return p;
+}
+Node* ThreadedBinaryTree::inSucc(Node *p){
+	if(p->rightTag==false)
+		return p->right;
+	p=p->right;
+	while(p->leftTag!=false)
+		p=p->left;
+	return p;
+}
+void ThreadedBinaryTree::noBranch(Node *p,Node *q){
+	if(p==root->left){
+		root->left=root;
+		root->leftTag=false;
+	}
+	else if(q==p->left){
+		p->leftTag=false;
+		p->left=q->left;
+	}
+	else{
+		p->rightTag=false;
+		p->right=q->right;
+	}
+	delete q;
+	return;
+}
+void ThreadedBinaryTree::oneBranch(Node *p,Node *q){
+	Node *next;
+	if(q->leftTag)
+		next=q->left;
+	else
+		next=q->right;
+	if(p=NULL)
+		root=next;
+	else if(q==p->left)
+		p->left=next;
+	else
+		p->right=next;
+	Node *succ=inSucc(q);
+	Node *pred=inPred(q);
+	if(q->leftTag)
+		pred->right=succ;
+	else if(q->rightTag)
+		succ->left=pred;
+	delete q;
+}
+void ThreadedBinaryTree::twoBranch(Node *p,Node *q){
+	Node *parsucc=q;
+	Node *succ=p->right;
+	while(succ->leftTag!=false){
+		parsucc=succ;
+		succ=succ->left;
+	}
+	q->data=succ->data;
+	if(succ->leftTag==false&&succ->rightTag==false)
+		noBranch(parsucc,succ);
+	else
+		oneBranch(parsucc,succ);
+}
+void ThreadedBinaryTree::deleteNode(int data){
+	Node *q=root->left;
+	Node *p=NULL;
+	bool found=false;
+	while(true){
+		if(q->data==data){
+			found=true;
+			break;
+		}
+		p=q;
+		if(data<q->data){
+			if(q->leftTag)
+				q=q->left;
+			else
+				break;
+		}
+		else{
+			if(q->rightTag)
+				q=q->right;
+			else
+				break;
+		}
+	}
+	if(!found){
+		cout<<"\n"<<data<<" Not Present in Tree";
+		return;
+	}
+	if(q->leftTag==true && q->rightTag==true)
+		twoBranch(p,q);
+	else if(q->leftTag==true)
+		oneBranch(p,q);
+	else if(q->rightTag==true)
+		oneBranch(p,q);
+	else
+		noBranch(p,q);
+	return;
+}
 int main(){
 	int elements[]={50,20,70,60,80,10,30,5,15,25,35};
 	int n=sizeof(elements)/sizeof(int);
@@ -123,6 +231,11 @@ int main(){
 	for(int i=0;i<n;i++)container.insert(elements[i]);
 	cout<<"\nInorder: ";
 	container.callInorder();
+	cout<<"\n";
+	container.deleteNode(80);
+	cout<<"\nInorder: ";
+	container.callInorder();
+	cout<<"\n";
 	return 0;
 }
 
