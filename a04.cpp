@@ -12,22 +12,31 @@ using namespace std;
 class Node{
 	string city;
 	float cost;
+	int label;
 	Node* link;
 public:
-	Node(string,float);
+	Node();
+	Node(string,float,int);
 	friend class List;
 	friend class Graph;
 };
-Node::Node(string city,float cost){
+Node::Node(){
+	this->city="\0";
+	this->cost=0;
+	this->label=-1;
+	link=NULL;
+}
+Node::Node(string city,float cost, int label){
 	this->city=city;
 	this->cost=cost;
+	this->label=label;
 	link=NULL;
 }
 class List{
 	Node* start;
 public:
 	List();
-	void insert(string,float);
+	void insert(string,float,int);
 	bool deleteNode(string);
 	void erase();
 	void display();
@@ -38,8 +47,8 @@ public:
 List::List(){
 	start=NULL;
 }
-void List::insert(string city,float cost){
-	Node *temp=new Node(city,cost);
+void List::insert(string city,float cost,int label){
+	Node *temp=new Node(city,cost,label);
 	if(start==NULL){
 		start=temp;
 		return;
@@ -87,7 +96,7 @@ bool List::search(string city){
 }
 void List::display(){
 	for(Node *p=start;p!=NULL;p=p->link)
-		cout<<"|"<<p->city<<"|"<<p->cost<<"|----";
+		cout<<"|"<<p->city<<"|"<<p->cost<<"|"<<p->label<<"|----";
 	cout<<"X";
 }
 class Graph{
@@ -103,6 +112,7 @@ public:
 	int inDegree(string);
 	void menu();
 	void display();
+	void traverseBFS(string);
 };
 Graph::Graph(){
 	count=0;
@@ -113,25 +123,27 @@ bool Graph::addVertex(string city){
 			cout<<"\n"<<city<<" Already Exists in Graph!";
 			return false;
 		}
-	array[count].insert(city,0);
+	array[count].insert(city,0,count);
 	count++;
 	return true;
 }
 void Graph::addEdge(string source,string destination,float cost){
-	int i,j;
+	int i,j,label;
 	for(i=0;i<count;i++){
 		if(array[i].start->city==source)
 			break;
 	}
 	for(j=0;j<count;j++){
-		if(array[j].start->city==destination)
+		if(array[j].start->city==destination){
+			label=array[j].start->label;
 			break;
+		}
 	}
 	if(i==count||j==count||i==j){
 		cout<<"\nInvalid Source and/or Destination";
 		return;
 	}
-	array[i].insert(destination,cost);
+	array[i].insert(destination,cost,label);
 }
 void Graph::display(){
 	for(int i=0;i<count;i++){
@@ -199,15 +211,52 @@ int Graph::inDegree(string city){
 	}
 	return cnt;
 }
+void Graph::traverseBFS(string city){
+	int i,label;
+	Node *p=NULL;
+	for(i=0;i<count;i++){
+		if(array[i].start->city==city){
+			p=array[i].start;
+			break;
+		}
+	}
+	if(i==count){
+		cout<<"\nCity: "<<city<<" Doesn't Exist!";
+		return;
+	}
+	queue<Node*> q;
+	bool visited[count];
+	for(int i=0;i<count;i++)
+		visited[i]=false;
+
+	q.push(p);
+	while(q.empty()==false){
+		p=q.front();
+		q.pop();
+
+		label=p->label;
+		visited[label]=true;
+		p=array[label].start;
+		cout<<p->city<<" ";
+
+		for(Node *ptr=p->link;ptr!=NULL;ptr=ptr->link){
+			if(!visited[ptr->label]){
+				q.push(ptr);
+				visited[ptr->label]=true;
+			}
+		}
+	}
+}
 void Graph::menu(){
 	cout<<"\n--------------------------OPTION INDEX--------------------------";
 	cout<<"\nPress 1: Add City in DataBase (Add Vertex in Graph)";
 	cout<<"\nPress 2: Connect Two Cities (Add Edge in Graph)";
-	cout<<"\nPress 3: DisConnect Two Cities (Delete Edge from Graph)";
-	cout<<"\nPress 4: Delete City from DataBase (Delete Vertex from Graph)";
-	cout<<"\nPress 5: Out-Going Traffic (Out-Degree)";
-	cout<<"\nPress 6: In-Coming Traffic (In-Degree)";
-	cout<<"\nPress 7: Traversal";
+	cout<<"\nPress 3: Display Adjacency List:";
+	cout<<"\nPress 4: DisConnect Two Cities (Delete Edge from Graph)";
+	cout<<"\nPress 5: Delete City from DataBase (Delete Vertex from Graph)";
+	cout<<"\nPress 6: Out-Going Traffic (Out-Degree)";
+	cout<<"\nPress 7: In-Coming Traffic (In-Degree)";
+	cout<<"\nPress 8: Traversal";
 	cout<<"\n----------------------------------------------------------------";
 }
 int main(){
@@ -228,26 +277,36 @@ int main(){
 					cout<<"\nEnter Cost: ";cin>>cost;
 					flights.addEdge(source,destination,cost);
 					break;
-
+			case 3: flights.display();
+					break;
+			case 4:	cout<<"\nEnter Source City: ";cin>>source;
+					cout<<"\nEnter Destination City: ";cin>>destination;
+					flights.deleteEdge(source,destination);
+					break;
+			case 5: cout<<"\nEnter City to be Deleted: ";cin>>city;
+					flights.deleteVertex(city);
+					break;
+			case 6: cout<<"\nEnter City: ";
+					cout<<"\nOut-Going Traffic: "<<flights.outDegree(city);
+					break;
+			case 7: cout<<"\nEnter City: ";
+					cout<<"\nIn-Coming Traffic: "<<flights.inDegree(city);
+					break;
+			case 8: cout<<"\nEnter City to Start Traversal: ";
+					cin>>city;
+					flights.traverseBFS(city);
+					break;
+			default:cout<<"\nInvalid Choice!";
 			}
+			cout<<"\nEnter Choice [99-INDEX|0-EXIT]: ";
+			cin>>choice;
 		}
+		cout<<"\nEND";
 }
-//int main() {
-//	Graph flights;
-//	flights.addVertex("Pune");
-//	flights.addVertex("Mumbai");
-//	flights.addVertex("Nashik");
-//	flights.addEdge("Pune","Mumbai",50);
-//	flights.addEdge("Pune","Nashik",60);
-//
-//	flights.addEdge("Mumbai","Pune",70);
-//	flights.addEdge("Mumbai","Nashik",80);
-//
-//	flights.addEdge("Nashik","Mumbai",85);
-//	flights.addEdge("Nashik","Pune",88);
-//
-//	flights.display();
-//	cout<<"\n"<<flights.inDegree("Pune");
-//
-//	return 0;
-//}
+/*
+
+1 1 1 2 1 3 2 1 2 0 2 2 3 0
+
+1 1 1 2 1 3 1 4 1 5 1 6 1 7 1 8 1 9 2 1 2 0 2 1 3 0 2 2 4 0 2 2 5 0 2 3 1 0 2 3 5 0 2 4 6 0 2 4 7 0 2 4 2 0 2 5 2 0 2 5 3 0 2 5 8 0 2 6 4 0 2 6 9 0 2 7 4 0 2 8 5 0 2 9 6 0
+
+*/
