@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include"Stack.cpp"		//paste Stack.cpp from repository into the Directory of this src file
 #define MAX 256
 using namespace std;
 
@@ -10,7 +11,6 @@ class Node{
 public:
 	Node(int);
 	friend class Tree;
-	friend class Stack;
 };
 
 Node::Node(int data){
@@ -20,49 +20,6 @@ Node::Node(int data){
 }
 /**************************************************************************************************/
 
-class Stack{
-	Node* array[MAX];
-	int index;
-public:
-	Stack();
-	void push(Node*);
-	void pop();
-	int empty();
-	Node* top();
-};
-
-Stack::Stack(){
-	index=-1;
-}
-
-void Stack::push(Node* p){
-	index++;
-	if(index<MAX)
-		array[index]=p;
-	else{
-		cout<<"\nStack Full!";
-		index--;
-	}
-}
-
-void Stack::pop(){
-	if(index==-1){
-		cout<<"\nStack is Empty";
-		return;
-	}
-	index--;
-}
-
-int Stack::empty(){
-	return index==-1;
-}
-
-Node* Stack::top(){
-	if(!empty())
-		return array[index];
-	return NULL;
-}
-/**************************************************************************************************/
 
 class Tree{
 private:
@@ -193,7 +150,7 @@ void Tree::inorderIterative(){
 	}
 	cout<<"\n";
 	Node *p=root;
-	Stack stack;
+	Stack<Node*> stack;
 	while(p!=NULL||!stack.empty()){
 		while(p!=NULL){
 			stack.push(p);
@@ -233,7 +190,7 @@ void Tree::preorderIterative(){
 	}
 	cout<<"\n";
 	Node *p=root;
-	Stack stack;
+	Stack<Node*> stack;
 	while(p!=NULL||!stack.empty()){
 		while(p!=NULL){
 			cout<<p->data<<" ";
@@ -270,7 +227,7 @@ void Tree::postorderIterative(){
 		return;
 	}
 	cout<<"\n";
-	Stack stack1,stack2;
+	Stack<Node*> stack1,stack2;
 	Node *p=root;
 	stack1.push(p);
 	while(!stack1.empty()){

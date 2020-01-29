@@ -6,9 +6,11 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include "bits/stdc++.h"
+#include <bits/stdc++.h>
+#include "Queue.cpp"	//paste Queue.cpp from repository into the Directory of this src file
 using namespace std;
 #define MAX 100
+
 class Node{
 	string city;
 	float cost;
@@ -32,6 +34,7 @@ Node::Node(string city,float cost, int label){
 	this->label=label;
 	link=NULL;
 }
+
 class List{
 	Node* start;
 public:
@@ -99,6 +102,8 @@ void List::display(){
 		cout<<"|"<<p->city<<"|"<<p->cost<<"|"<<p->label<<"|----";
 	cout<<"X";
 }
+
+
 class Graph{
 	List array[MAX];
 	int count;
@@ -224,7 +229,7 @@ void Graph::traverseBFS(string city){
 		cout<<"\nCity: "<<city<<" Doesn't Exist!";
 		return;
 	}
-	queue<Node*> q;
+	Queue<Node*> q;
 	bool visited[count];
 	for(int i=0;i<count;i++)
 		visited[i]=false;
@@ -259,6 +264,8 @@ void Graph::menu(){
 	cout<<"\nPress 8: Traversal";
 	cout<<"\n----------------------------------------------------------------";
 }
+
+
 int main(){
 		Graph flights;
 		string source,destination,city;
