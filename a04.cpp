@@ -303,6 +303,8 @@ int main(){
 					cin>>city;
 					flights.traverseBFS(city);
 					break;
+			case 99:flights.menu();
+					break;
 			default:cout<<"\nInvalid Choice!";
 			}
 			cout<<"\nEnter Choice [99-INDEX|0-EXIT]: ";
