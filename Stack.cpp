@@ -72,14 +72,3 @@ template<typename T>
 bool Stack<T>::empty(){
 	return start==NULL;
 }
-
-
-
-
-
-
-
-
-
-
-
