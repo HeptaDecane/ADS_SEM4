@@ -8,7 +8,7 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-#define MAX 4
+#define MAX 29
 
 class Dictionary{
 	string word;
@@ -77,6 +77,26 @@ bool Hash::insertWithoutReplacement(Dictionary entry){
 	cout<<"\nTable Full!";
 	return false;
 }
+bool Hash::insertWithReplacement(Dictionary entry){
+	int index=hashFunction(entry);
+	if(!table[index].word.length()){
+		table[index]=entry;
+		cout<<"\nInserted!";
+		return true;		
+	}
+	Dictionary current=table[index];
+	if(index==hashFunction(current))
+		return insertWithoutReplacement(entry);
+		
+	table[index]=entry;
+	if(insertWithoutReplacement(current)==false){
+		table[index]=current;
+		return false;
+	}
+	return true;
+	
+}
+
 void Hash::printTable(){
 	cout<<"\nindex\tword\tmeaning";
 	for(int i=0;i<MAX;i++){
@@ -86,18 +106,18 @@ void Hash::printTable(){
 int main() {
 	Dictionary obj1("Hello","1");
 	Dictionary obj2("Hello","2");
-	Dictionary obj3("Hello","3");
+	Dictionary obj3("Helloaaa","3");
 	Dictionary obj4("Hello","4");
 	Dictionary obj5("Hello","5");
 	Dictionary obj6("Hello","6");
 	Hash obj;
-	obj.insertWithoutReplacement(obj1);
-	obj.insertWithoutReplacement(obj2);
-	obj.insertWithoutReplacement(obj3);
-	obj.insertWithoutReplacement(obj4);
-	obj.insertWithoutReplacement(obj5);
-	obj.insertWithoutReplacement(obj6);
-
+	obj.insertWithReplacement(obj1);
+	obj.insertWithReplacement(obj2);
+	
+	obj.insertWithReplacement(obj4);
+	obj.insertWithReplacement(obj5);
+	obj.insertWithReplacement(obj6);
+	obj.insertWithReplacement(obj3);
 	obj.printTable();
 	return 0;
 }
