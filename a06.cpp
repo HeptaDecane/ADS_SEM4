@@ -38,6 +38,10 @@ void Dictionary::read(){
 	cin.ignore();
 	getline(cin,meaning);
 }
+
+
+
+
 class Hash{
 	Dictionary table[MAX];
 public:;
@@ -45,8 +49,10 @@ public:;
 	bool insertWithReplacement(Dictionary);
 	bool insertWithoutReplacement(Dictionary);
 	void printTable();
-	int searchEntry(Dictionary);
-	bool deleteEntry(Dictionary);
+	void showMeaning(int);
+	int searchEntry(string);
+	bool deleteEntry(string);
+	void menu();
 };
 int Hash::hashFunction(Dictionary entry){
 	int location=0;
@@ -94,7 +100,22 @@ bool Hash::insertWithReplacement(Dictionary entry){
 		return false;
 	}
 	return true;
-	
+}
+int Hash::searchEntry(string key){
+	Dictionary entry(key," ");
+	int count=0;
+	int index=hashFunction(entry);
+	for(int i=index; count<MAX;count++,i++){
+		if(i==MAX)
+			i=0;
+
+		if(table[i].word==key){
+			cout<<"\nNo. of Comparisons: "<<count+1;
+			return i;
+		}
+	}
+	cout<<"\nNo. of Comparisons: "<<count;
+	return -1;
 }
 
 void Hash::printTable(){
@@ -103,21 +124,90 @@ void Hash::printTable(){
 		cout<<"\n"<<i<<"\t"<<table[i].word<<"\t"<<table[i].meaning;
 	}
 }
+bool Hash::deleteEntry(string key){
+	int index=searchEntry(key);
+	if (index==-1)
+		return false;
+	Dictionary blank;
+	table[index]=blank;
+	return true;
+}
+void Hash::showMeaning(int index){
+	cout<<"\n"<<table[index].word<<": "<<table[index].meaning;
+}
+void Hash::menu(){
+	cout<<"\n------------------------------------------------------";
+	cout<<"\n           OPTION INDEX";
+	cout<<"\nPress 1  : Add Word into Dictionary";
+	cout<<"\nPress 2  : Search Word";
+	cout<<"\nPress 3  : Delete Word";
+	cout<<"\nPress 4  : Print Hash table";
+	cout<<"\nPress 99 : Display Option Index";
+	cout<<"\n------------------------------------------------------";
+}
 int main() {
-	Dictionary obj1("Hello","1");
-	Dictionary obj2("Hello","2");
-	Dictionary obj3("Helloaaa","3");
-	Dictionary obj4("Hello","4");
-	Dictionary obj5("Hello","5");
-	Dictionary obj6("Hello","6");
+	int replacement=0;
+	while(replacement!=1 and replacement!=2){
+		cout<<"\nChoose Insertion Method.";
+		cout<<"\n1. With Replacement";
+		cout<<"\n2. Without Replacement";
+		cout<<"\nEnter Choice: ";
+		cin>>replacement;
+	}
+	if (replacement==2)
+		replacement=0;
+
+	int choice;
 	Hash obj;
-	obj.insertWithReplacement(obj1);
-	obj.insertWithReplacement(obj2);
-	
-	obj.insertWithReplacement(obj4);
-	obj.insertWithReplacement(obj5);
-	obj.insertWithReplacement(obj6);
-	obj.insertWithReplacement(obj3);
-	obj.printTable();
+	Dictionary entry;
+	string key;
+	int index;
+	bool flag;
+
+	obj.menu();
+	cout<<"\n\nEnter Choice: ";
+	cin>>choice;
+
+	while(choice){
+		switch(choice){
+		case 1:	entry.read();
+				if(replacement)
+					obj.insertWithReplacement(entry);
+				else
+					obj.insertWithoutReplacement(entry);
+				break;
+
+		case 2:	cout<<"\nEnter Word to Search: ";
+				cin>>key;
+				index=obj.searchEntry(key);
+				if(index!=-1){
+					cout<<"\n"<<key<<" found at index: "<<index;
+					obj.showMeaning(index);
+				}
+				else
+					cout<<"\n"<<key<<" not Found!";
+				break;
+
+		case 3:	cout<<"\nEnter Word to Search: ";
+				cin>>key;
+				flag=obj.deleteEntry(key);
+				if(flag==true)
+					cout<<"\n"<<key<<" Deleted Successfully!";
+				else
+					cout<<"\n"<<key<<" not Found!";
+				break;
+
+		case 4:	obj.printTable();
+				break;
+
+		case 99: obj.menu();
+					break;
+
+		default:cout<<"\nInvalid Choice! Please, Try Again.";
+		}
+		cout<<"\n\nEnter Choice: ";
+		cin>>choice;
+	}
+	cout<<"\nEND...";
 	return 0;
 }
