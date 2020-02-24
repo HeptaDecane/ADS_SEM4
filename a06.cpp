@@ -56,7 +56,7 @@ public:;
 };
 int Hash::hashFunction(Dictionary entry){
 	int location=0;
-	for(int i=0;i<entry.word.length();i++){
+	for(unsigned int i=0;i<entry.word.length();i++){
 		location=location+entry.word[i];
 	}
 	location=location%MAX;
