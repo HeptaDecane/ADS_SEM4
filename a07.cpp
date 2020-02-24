@@ -4,6 +4,7 @@
 // Version     :
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
+// https://github.com/trusktr/gedit-color-schemes.git
 //============================================================================
 
 #include <bits/stdc++.h>
