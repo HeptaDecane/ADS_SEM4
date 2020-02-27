@@ -1,232 +1,225 @@
-//============================================================================
-// Name        : Assignment7.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-// https://github.com/trusktr/gedit-color-schemes.git
-//============================================================================
-
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-int hash(string s);
-class node{
-	string iden;
-	string attr;
-	int chain;
-public:
-	node()
-{
-		iden="\0";
-		attr="\0";
-		chain=-1;
-}
-	friend class symbolTable;
-};
-class symbolTable{
-	node G[30];
-public:
-	symbolTable()
-{
+#define MAX 29
 
-}
-	void create(int flag);
-	int insertwith(int i,string s);
-	int insertwithout(int i,string s);
-	void display();
-	int find(string s);
-};
-void symbolTable::create(int flag)
-{
-	string s,s1;
-	cout<<"Keep entering identifiers and value\n";
-	while(1)
-	{
-		cout<<"Enter identifier: ";
-		cin>>s;
-		if(s=="-1")
-			break;
-		transform(s.begin(),s.end(),s.begin(),::toupper);
-		int i=hash(s);
-		if(flag==1)
-			i=insertwithout(i,s);
-		if(flag==2)
-			i=insertwith(i,s);
-		cout<<"Enter attribute: ";
-		cin>>s1;
-		transform(s1.begin(),s1.end(),s1.begin(),::toupper);
-		G[i].attr=s1;
-	}
-}
-int symbolTable::insertwithout(int i,string s)
-{
-	if(G[i].iden=="\0")
-	{
-		G[i].iden=s;
-		return i;
-	}
-	int j=hash(G[i].iden);
-	if(i==j)
-	{
-		int k=i;
-		while(G[k].chain!=-1)
-			k=G[k].chain;
-		int l=k;
-		while(G[l].iden!="\0")
-			l=(l+1)%30;
-		G[l].iden=s;
-		G[k].chain=l;
-		return l;
-	}
-	int k=j;
-	do{
-		int m=hash(G[k].iden);
-		if(i==m)
-		{
-			break;
-		}
-		k=(k+1)%30;
-	}while(k!=j);
-	if(k==j)
-	{
-		while(G[k].iden!="\0")
-			k=(k+1)%30;
-		G[k].iden=s;
-		return k;
-	}
-	else
-	{
-		int l=k;
-		while(G[l].chain!=-1)
-			l=G[l].chain;
-		while(G[l].iden!="\0")
-			l=(l+1)%30;
-		G[l].iden=s;
-		G[k].chain=l;
-		return l;
-	}
-}
-int symbolTable::insertwith(int i,string s)
-{
-	if(G[i].iden=="\0")
-	{
-		G[i].iden=s;
-		return i;
-	}
-	int j=hash(G[i].iden);
-	if(i==j)
-	{
-		int k=j;
-		while(G[k].chain!=-1)
-			k=G[k].chain;
-		int l=k;
-		while(G[l].iden!="\0")
-			l=(l+1)%30;
-		G[l].iden=s;
-		G[k].chain=l;
-		return l;
-	}
-	if(G[j].chain==-1)
-	{
-		int k=j;
-		while(G[k].iden!="\0")
-			k=(k+1)%30;
-		G[k].iden=G[i].iden;
-		G[k].attr=G[i].attr;
-		G[i].iden=s;
-		return i;
-	}
-	G[j].chain=G[i].chain;
-	while(G[j].chain!=-1)
-		j=G[j].chain;
-	int k=j;
-	while(G[k].iden!="\0")
-		k=(k+1)%30;
-	G[k].iden=G[i].iden;
-	G[k].attr=G[i].attr;
-	G[j].chain=k;
-	G[i].iden=s;
-	G[i].chain=-1;
-	return i;
-}
-void symbolTable::display()
-{
-	cout<<"Index\tIden\tAttr\tChain\n";
-	for(int i=0;i<30;i++)
-	{
-		if(G[i].iden!="\0")
-		{
-			cout<<i<<"\t"<<G[i].iden<<"\t"<<G[i].attr<<"\t"<<G[i].chain<<endl;
-		}
-	}
-}
-int symbolTable::find(string s)
-{
-	int i=hash(s);
-	int k=i;
-	if(i!=hash(G[i].iden))
-	{
-	do{
-		int j=hash(G[k].iden);
-		if(i==j)
-			break;
-		k=(k+1)%30;
-	}while(k!=i);
-	}
-	else
-	{
-		k=i;
-	}
-	do
-	{
-		if(G[k].iden==s)
-		{
-			cout<<"Identifier found\n";
-			return k;
-		}
-		k=G[k].chain;
-	}while(G[k].chain!=-1);
-	cout<<"Not found\n";
-	return -1;
-}
-int hash(string s)
-{
-	return (((int)s[0]-65)%30);
-}
-int main() {
-	symbolTable s;
-	string s1,s2;
-	int choice,c; 
-	do{
-		cout<<"Menu\n1.Create\n2.Display\n3.Insert\n4.Find\n";
-		cin>>choice;
-		switch(choice){
-		case 1:
-			cout<<"1.Without Replacement\n2.With replacement\n";
-			cin>>c;
-			s.create(c);
-			break;
-		case 2:
-			s.display();
-			break;
-		case 3:
-			cout<<"Enter Identifier to insert:";
-			cin>>s1;
-			cout<<"1.Without Replacement\n2.With Replacement\n";
-			cin>>c;
-			int i;
-			i=hash(s);
-			if(c==1)
-				i=insertwithout(i,s1);
-			else
-				i=insertwith(i,s1);
-			cout<<"Enter attribute:";
-			cin>>s2;
+/**************************************************************************************************/
 
+class Node{
+	string identifier;
+	int scope;
+	string type;
+	string value;
+	Node *link;
+public:
+	Node();
+	Node(string,int,string,string);
+	void print();
+	friend class List;
+	friend class Table;
+};
+
+
+Node::Node(){
+	this->identifier[0]='\0';
+	this->scope=0;
+	this->type[0]='\0';
+	this->value[0]='\0';
+	link=NULL;
+}
+
+
+Node::Node(string identifier, int scope, string type, string value){
+	this->identifier=identifier;
+	this->scope=scope;
+	this->type=type;
+	this->value=value;
+	link=NULL;
+}
+
+
+void Node::print(){
+	cout<<"\n\t| Identifier |  "<<identifier;
+	if(scope==0)
+		cout<<"\n\t| Scope      |  Global";
+	else
+		cout<<"\n\t| Scope      |  "<<scope;
+	cout<<"\n\t| Type       |  "<<type;
+	cout<<"\n\t| Value      |  "<<value;
+}
+
+/**************************************************************************************************/
+
+class List{
+	Node *start;
+public:
+	List(){start=NULL;}
+	void pushFront(string,int,string,string);
+	void pushFront(Node*);
+	void pushBack(string,int,string,string);
+	void pushBack(Node*);
+	Node* popFront();
+	bool deleteNode(string,int);
+	void print();
+	bool searchNode(string);
+	bool declared(string,int);
+	friend class Table;
+};
+
+
+void List::pushFront(string identifier,int scope,string type,string value){
+	Node* temp=new Node(identifier,scope,type,value);
+	temp->link=start;
+	start=temp;
+	return;
+}
+
+
+void List::pushFront(Node *temp){
+	temp->link=start;
+	start=temp;
+	return;
+}
+
+
+void List::pushBack(string identifier,int scope,string type,string value){
+	Node *temp=new Node(identifier,scope,type,value);
+	if(start==NULL){
+		start=temp;
+		return;
+	}
+	Node *p=start;
+	for(p=start;p->link!=NULL;p=p->link);
+	p->link=temp;
+	return;
+}
+
+
+void List::pushBack(Node *temp){
+	if(start==NULL){
+		start=temp;
+		return;
+	}
+	Node *p=start;
+	for(p=start;p->link!=NULL;p=p->link);
+	p->link=temp;
+	return;
+}
+
+
+Node* List::popFront(){
+	Node *p=start;
+	start=start->link;
+	p->link=NULL;
+	return p;
+}
+
+
+void List::print(){
+	for(Node* p=start;p!=NULL;p=p->link)
+		p->print();
+}
+
+
+bool List::searchNode(string identifier){
+	bool flag=false;
+	for(Node *p=start;p!=NULL;p=p->link){
+		if(p->identifier==identifier){
+			p->print();
+			cout<<"\n";
+			flag=true;
 		}
 	}
-	s.create(2);
-	s.display();
-	cout<<s.find("B");
-	return 0;
+	return flag;
 }
+
+
+bool List::declared(string identifier,int scope){
+	for(Node *p=start;p!=NULL;p=p->link){
+		if(p->identifier==identifier&&p->scope==scope)
+			return true;
+	}
+	return false;	
+}
+
+
+bool List::deleteNode(string identifier,int scope){
+	if(start==NULL)
+		return false;
+	Node *p=NULL;
+	Node *q=start;
+	for(q=start;q!=NULL;q=q->link){
+		if(q->identifier==identifier&&q->scope==scope)
+			break;
+		p=q;
+	}
+	if(q==NULL)
+		return false;
+	else if(p==NULL){
+		p=start;
+		start=start->link;
+		p->link=NULL;
+		delete p;
+		return true;
+	}
+	else{
+		p->link=q->link;
+		q->link=NULL;
+		delete q;
+		return true;
+	}
+}
+
+/**************************************************************************************************/
+
+class Table{
+	List row[MAX];
+public:
+	void insertWithReplacement(string,int,string,string);
+	void insertWithoutReplacement(string,int,string,string);
+	void searchIdentifier(string);
+	void deleteIdentifier(string,int);
+	bool modifyIdentifier(string,int,string,string);
+	int hashFunction(string identifier);
+};
+int Table::hashFunction(string identifier){
+	int sum=0;
+	for(int i=0;i<identifier.length();i++)
+		sum=sum+identifier;
+		
+	return sum%MAX;
+}
+void Table::insertWithoutReplacement(string identifier,int scope,string type,string value){
+	Node *data=new Node(identifier,scope,type,value);
+	int index=hashFunction(identifier);
+	row[index].pushBack(data);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
