@@ -84,7 +84,7 @@ void Table::print(){
 
 int Table::getEmptyLocation(int id){
 	int count=0;
-	for(int i=id;count<MAX;i=++i%MAX){
+	for(int i=id;count<MAX;i=(i+1)%MAX){
 		if(row[i].identifier.length()==0)
 			return i;
 	}
@@ -106,7 +106,7 @@ int Table::h(string identifier){
 int Table::locateStart(int id){
 	int count=0,i;
 	for(i=id;count<MAX;i=(i+1)%MAX){
-		if(id==h(row[i].identifier)&&row[i].identifier.length())
+		if(id==h(row[i].identifier) and row[i].identifier.length()!=0)
 			break;
 		count++;
 	}
@@ -294,4 +294,3 @@ int main() {
 	cout<<"\nEND...";
 	return 0;
 }
- 
