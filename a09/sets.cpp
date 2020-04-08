@@ -21,11 +21,11 @@ Set<T>::Set(){
 template<typename T>
 void Set<T>::print(){
 	if(start == NULL){
-		cout<<"\n{ # }";
+		cout<<"{ # }";
 		return;
 	}
 	SetNode<T> *p = NULL;
-	cout<<"\n{ ";
+	cout<<"{ ";
 	for(p=start; p!=NULL; p=p->link)
 		cout<<p->data<<", ";
 	cout<<"\b\b }";
@@ -83,14 +83,54 @@ int Set<T>::size(){
 	return count;
 }
 
+template<typename T>
+bool Set<T>::isSubset(Set<T> a){
+	SetNode<T> *p=NULL;
+	for(p=start; p!=NULL; p=p->link){
+		if(a.contains(p->data) == false)
+			return false;
+	}
+	return true;
+}
 
+template<typename T>
+Set<T> Set<T>::unification(Set<T> b){
+	Set<T> c;
+	SetNode<T> *p=NULL;
+	
+	for(p=this->start; p!=NULL; p=p->link)
+		c.add(p->data);
+	
+	for(p=b.start; p!=NULL; p=p->link)
+		c.add(p->data);
+	
+	return c;
+}
 
+template<typename T>
+Set<T> Set<T>::intersection(Set<T> b){
+	Set<T> c;
+	SetNode<T> *p=NULL;
+	for(p=start; p!=NULL; p=p->link){
+		if(b.contains(p->data))
+			c.add(p->data);
+	}
+	return c;
+}
 
-
-
-
-
-
+template<typename T>
+Set<T> Set<T>::difference(Set<T> b){
+	Set<T> c;
+	SetNode<T> *p=NULL;
+	
+	for(p=this->start; p!=NULL; p=p->link)
+		c.add(p->data);
+	
+	for(p=b.start; p!=NULL; p=p->link)
+		c.remove(p->data);
+		
+	return c;
+}
 
 
 
