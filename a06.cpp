@@ -44,7 +44,7 @@ void Dictionary::read(){
 
 class Hash{
 	Dictionary table[MAX];
-public:;
+public:
 	int hashFunction(Dictionary);
 	bool insertWithReplacement(Dictionary);
 	bool insertWithoutReplacement(Dictionary);

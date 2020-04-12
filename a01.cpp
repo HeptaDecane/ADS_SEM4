@@ -411,6 +411,7 @@ int main(){
 					t->postorderIterative();
 					break;
 			case 8: cout<<"\nMirrored The Existing tree!";
+					t->callMirror();
 					break;
 			case 9: if(selected)
 						if(t->isEqual(t1))
@@ -424,6 +425,7 @@ int main(){
 							cout<<"\nTree 1 and Tree 2 are NOT identical";
 					break;
 			case 10:cout<<"\nTree Erased!";
+					t->callErase();
 					break;
 			case 11:cout<<"\nLeaf Nodes: ";
 					t->callPrintLeafNodes();

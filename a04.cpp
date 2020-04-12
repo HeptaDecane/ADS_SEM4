@@ -293,10 +293,10 @@ int main(){
 			case 5: cout<<"\nEnter City to be Deleted: ";cin>>city;
 					flights.deleteVertex(city);
 					break;
-			case 6: cout<<"\nEnter City: ";
+			case 6: cout<<"\nEnter City: ";cin>>city;
 					cout<<"\nOut-Going Traffic: "<<flights.outDegree(city);
 					break;
-			case 7: cout<<"\nEnter City: ";
+			case 7: cout<<"\nEnter City: ";cin>>city;
 					cout<<"\nIn-Coming Traffic: "<<flights.inDegree(city);
 					break;
 			case 8: cout<<"\nEnter City to Start Traversal: ";
